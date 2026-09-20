@@ -77,11 +77,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "BlindMatch" },
+      {
+        name: "description",
+        content: "An 18+ dating Mini App built around real answers, not endless swiping.",
+      },
+      { name: "author", content: "BlindMatch" },
+      { property: "og:title", content: "BlindMatch" },
+      {
+        property: "og:description",
+        content: "An 18+ dating Mini App built around real answers, not endless swiping.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
