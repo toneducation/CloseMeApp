@@ -1,24 +1,40 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { AppShell } from "@/components/AppShell";
+import { AuthGate } from "@/components/AuthGate";
+import { DiscoverDeck } from "@/components/DiscoverDeck";
+import { getMyMatches } from "@/lib/social.functions";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "BlindMatch — meet someone worth talking to" },
+      {
+        name: "description",
+        content:
+          "BlindMatch is an 18+ dating Mini App: one thoughtful profile at a time, and chat that only opens on a mutual like.",
+      },
+      { property: "og:title", content: "BlindMatch — meet someone worth talking to" },
+      {
+        property: "og:description",
+        content:
+          "One thoughtful profile at a time. Chat opens only when you both say yes. Strictly 18+.",
+      },
+    ],
+  }),
+  component: DiscoverPage,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function DiscoverPage() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <AuthGate>
+      {(profile) => <DiscoverShell>{<DiscoverDeck profile={profile} />}</DiscoverShell>}
+    </AuthGate>
   );
+}
+
+function DiscoverShell({ children }: { children: React.ReactNode }) {
+  const matches = useQuery({ queryKey: ["matches"], queryFn: () => getMyMatches() });
+  const unread = (matches.data ?? []).reduce((total, m) => total + m.unread, 0);
+  return <AppShell unread={unread}>{children}</AppShell>;
 }
