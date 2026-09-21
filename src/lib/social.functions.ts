@@ -183,7 +183,9 @@ export const blockPerson = createServerFn({ method: "POST" })
 
     // Blocking removes the pair from each other's matches immediately.
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const [a, b] = [context.userId, data.userId].sort();
+    const pair = [context.userId, data.userId].sort();
+    const a = pair[0]!;
+    const b = pair[1]!;
     await supabaseAdmin.from("matches").delete().eq("user_a", a).eq("user_b", b);
     return { ok: true };
   });
@@ -250,7 +252,9 @@ export const reportPerson = createServerFn({ method: "POST" })
           { onConflict: "blocker_id,blocked_id" },
         );
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-      const [a, b] = [context.userId, data.userId].sort();
+      const pair = [context.userId, data.userId].sort();
+    const a = pair[0]!;
+    const b = pair[1]!;
       await supabaseAdmin.from("matches").delete().eq("user_a", a).eq("user_b", b);
     }
     return { ok: true };

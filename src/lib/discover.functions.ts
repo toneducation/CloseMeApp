@@ -87,10 +87,10 @@ async function buildFeed(
       // Controlled randomness so the same kind of profile isn't always first.
       return { p, score, rank: score + Math.random() * 18 };
     })
-    .sort((a, b) => b.rank - a.rank)
+    .sort((x: { rank: number }, y: { rank: number }) => y.rank - x.rank)
     .slice(0, limit);
 
-  return scored.map(({ p, score }) => ({
+  return scored.map(({ p, score }: { p: any; score: number }) => ({
     id: p.id,
     first_name: p.first_name,
     age: p.age,
@@ -238,7 +238,9 @@ export const reactToProfile = createServerFn({ method: "POST" })
         )
       : 50;
 
-    const [a, b] = [userId, data.targetId].sort();
+    const pair = [userId, data.targetId].sort();
+    const a = pair[0]!;
+    const b = pair[1]!;
     const created = await supabaseAdmin
       .from("matches")
       .upsert({ user_a: a, user_b: b, compatibility: score }, { onConflict: "user_a,user_b" })
