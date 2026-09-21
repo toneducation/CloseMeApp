@@ -113,14 +113,10 @@ export const getConversation = createServerFn({ method: "POST" })
           }
         : null,
       icebreakers: icebreakers(
-        {
-          interests: (me.data?.interests ?? []) as string[],
-          personality: (me.data?.personality ?? {}) as Record<string, unknown>,
-        },
-        {
-          interests: (person.data?.interests ?? []) as string[],
-          personality: (person.data?.personality ?? {}) as Record<string, unknown>,
-        },
+        (person.data?.first_name as string | null) ?? "they",
+        (me.data?.interests ?? []) as string[],
+        (person.data?.interests ?? []) as string[],
+        (person.data?.personality ?? {}) as Record<string, unknown>,
       ),
       messages: (messages.data ?? []).map((m) => ({
         id: m.id,
