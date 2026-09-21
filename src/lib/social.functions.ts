@@ -113,14 +113,10 @@ export const getConversation = createServerFn({ method: "POST" })
           }
         : null,
       icebreakers: icebreakers(
-        {
-          interests: (me.data?.interests ?? []) as string[],
-          personality: (me.data?.personality ?? {}) as Record<string, unknown>,
-        },
-        {
-          interests: (person.data?.interests ?? []) as string[],
-          personality: (person.data?.personality ?? {}) as Record<string, unknown>,
-        },
+        (person.data?.first_name as string | null) ?? "they",
+        (me.data?.interests ?? []) as string[],
+        (person.data?.interests ?? []) as string[],
+        (person.data?.personality ?? {}) as Record<string, unknown>,
       ),
       messages: (messages.data ?? []).map((m) => ({
         id: m.id,
@@ -187,7 +183,9 @@ export const blockPerson = createServerFn({ method: "POST" })
 
     // Blocking removes the pair from each other's matches immediately.
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const [a, b] = [context.userId, data.userId].sort();
+    const pair = [context.userId, data.userId].sort();
+    const a = pair[0]!;
+    const b = pair[1]!;
     await supabaseAdmin.from("matches").delete().eq("user_a", a).eq("user_b", b);
     return { ok: true };
   });
@@ -254,7 +252,9 @@ export const reportPerson = createServerFn({ method: "POST" })
           { onConflict: "blocker_id,blocked_id" },
         );
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-      const [a, b] = [context.userId, data.userId].sort();
+      const pair = [context.userId, data.userId].sort();
+    const a = pair[0]!;
+    const b = pair[1]!;
       await supabaseAdmin.from("matches").delete().eq("user_a", a).eq("user_b", b);
     }
     return { ok: true };
