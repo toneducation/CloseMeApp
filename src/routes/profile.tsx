@@ -69,7 +69,7 @@ function ProfileInner({ profile }: { profile: NonNullable<MyProfile> }) {
   const unread = (matches.data ?? []).reduce((total, m) => total + m.unread, 0);
 
   const [range, setRange] = useState<number[]>([profile.min_age, profile.max_age]);
-  const [pref, setPref] = useState<string>(profile.preferred_gender);
+  const [pref, setPref] = useState<string>(profile.preferred_gender ?? "everyone");
   const [filterCity, setFilterCity] = useState(profile.filter_city ?? "");
 
   const savePrefs = useMutation({
