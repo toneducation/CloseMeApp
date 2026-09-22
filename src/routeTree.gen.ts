@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as LegalRouteImport } from './routes/legal'
 import { Route as MatchesRouteImport } from './routes/matches'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as StaffRouteImport } from './routes/staff'
 import { Route as ChatMatchIdRouteImport } from './routes/chat.$matchId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -35,6 +36,11 @@ const ProfileRoute = ProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StaffRoute = StaffRouteImport.update({
+  id: '/staff',
+  path: '/staff',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ChatMatchIdRoute = ChatMatchIdRouteImport.update({
   id: '/chat/$matchId',
   path: '/chat/$matchId',
@@ -46,6 +52,7 @@ export interface FileRoutesByFullPath {
   '/legal': typeof LegalRoute
   '/matches': typeof MatchesRoute
   '/profile': typeof ProfileRoute
+  '/staff': typeof StaffRoute
   '/chat/$matchId': typeof ChatMatchIdRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +60,7 @@ export interface FileRoutesByTo {
   '/legal': typeof LegalRoute
   '/matches': typeof MatchesRoute
   '/profile': typeof ProfileRoute
+  '/staff': typeof StaffRoute
   '/chat/$matchId': typeof ChatMatchIdRoute
 }
 export interface FileRoutesById {
@@ -61,14 +69,23 @@ export interface FileRoutesById {
   '/legal': typeof LegalRoute
   '/matches': typeof MatchesRoute
   '/profile': typeof ProfileRoute
+  '/staff': typeof StaffRoute
   '/chat/$matchId': typeof ChatMatchIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/legal' | '/matches' | '/profile' | '/chat/$matchId'
+  fullPaths:
+    '/' | '/legal' | '/matches' | '/profile' | '/staff' | '/chat/$matchId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/legal' | '/matches' | '/profile' | '/chat/$matchId'
-  id: '__root__' | '/' | '/legal' | '/matches' | '/profile' | '/chat/$matchId'
+  to: '/' | '/legal' | '/matches' | '/profile' | '/staff' | '/chat/$matchId'
+  id:
+    | '__root__'
+    | '/'
+    | '/legal'
+    | '/matches'
+    | '/profile'
+    | '/staff'
+    | '/chat/$matchId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -76,6 +93,7 @@ export interface RootRouteChildren {
   LegalRoute: typeof LegalRoute
   MatchesRoute: typeof MatchesRoute
   ProfileRoute: typeof ProfileRoute
+  StaffRoute: typeof StaffRoute
   ChatMatchIdRoute: typeof ChatMatchIdRoute
 }
 
@@ -109,6 +127,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/staff': {
+      id: '/staff'
+      path: '/staff'
+      fullPath: '/staff'
+      preLoaderRoute: typeof StaffRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/chat/$matchId': {
       id: '/chat/$matchId'
       path: '/chat/$matchId'
@@ -124,6 +149,7 @@ const rootRouteChildren: RootRouteChildren = {
   LegalRoute: LegalRoute,
   MatchesRoute: MatchesRoute,
   ProfileRoute: ProfileRoute,
+  StaffRoute: StaffRoute,
   ChatMatchIdRoute: ChatMatchIdRoute,
 }
 export const routeTree = rootRouteImport
